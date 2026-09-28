@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- APK скачивается в <files>/downloads (path_provider getApplicationDocumentsDirectory)
+         или <files>/app_flutter/downloads — покрываем оба случая. -->
+    <files-path name="apk" path="downloads/" />
+    <files-path name="apk_flutter" path="app_flutter/downloads/" />
+    <files-path name="files_root" path="." />
+    <cache-path name="apk_cache" path="downloads/" />
+    <cache-path name="apk_flutter_cache" path="app_flutter/downloads/" />
+    <cache-path name="cache_root" path="." />
+</paths>

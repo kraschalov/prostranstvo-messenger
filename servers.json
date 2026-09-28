@@ -1,0 +1,18 @@
+{
+  "updated": "2026-09-26",
+  "how_to_list": "Чтобы попасть в каталог — пулл-реквест с вашей записью. Нет записи = сервер закрыт по умолчанию.",
+  "servers": [
+    {
+      "alias": "Пространство • Дом",
+      "host": "5.189.246.149:5050",
+      "federation": "open",
+      "contact": "владелец проекта"
+    },
+    {
+      "alias": "Пример сервера",
+      "host": "mes.example.com",
+      "federation": "allowlist",
+      "contact": "admin@example.com"
+    }
+  ]
+}

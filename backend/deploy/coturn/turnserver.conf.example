@@ -1,0 +1,13 @@
+# Скопируй в turnserver.conf и подставь своё.
+listening-port=3478
+min-port=10000
+max-port=20000
+fingerprint
+lt-cred-mech
+realm=prostranstvo.local
+server-name=prostranstvo
+user=MESENGER_USER:MESENGER_PASSWORD
+external-ip=PUBLIC_IP/192.168.1.10
+no-cli
+no-multicast-peers
+log-file=stdout

@@ -1,0 +1,68 @@
+# Приватные данные и секреты — НИКОГДА в репозиторий.
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite-journal
+data/
+uploads/
+*.keystore
+*.jks
+key.properties
+keystore.properties
+.env
+!.env.example
+google-services.json
+GoogleService-Info.plist
+
+# Сборки и артефакты (раздаются через GitHub Releases, не через репо).
+*.apk
+*.aab
+*.ipa
+*.exe
+*.zip
+build/
+dist/
+
+# Flutter / Dart.
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+flutter_*.log
+
+# Android / Gradle.
+.gradle/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+*.iml
+.idea/
+*.hprof
+
+# Python.
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+*.egg-info/
+
+# ОС и редакторы.
+.DS_Store
+Thumbs.db
+.vscode/
+*.swp
+*~
+
+# Локальные заметки и tooling хозяина (не часть проекта).
+MEMORY.md
+HANDOFF.md
+.mimocode/
+.opencode/
+diag/
+*.log
+*.bak
