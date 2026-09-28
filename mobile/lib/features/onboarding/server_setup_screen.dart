@@ -46,7 +46,7 @@ class _ServerSetupScreenState extends ConsumerState<ServerSetupScreen> {
     // Семейный дефолт: свой сервер уже вписан — новичку остаётся
     // только нажать «Подключиться» (вход по отпечатку, без инвайта
     // для известных устройств).
-    if (_domain.text.isEmpty && kDefaultServer.isNotEmpty) {
+    if (_domain.text.isEmpty) {
       _domain.text = kDefaultServer;
     }
   }

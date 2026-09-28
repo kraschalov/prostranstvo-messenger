@@ -11,7 +11,7 @@ from starlette.websockets import WebSocketState
 from app import crypto, db
 from app.config import settings
 from app.federation import s2s_client
-from app.routers import admin, appeals, auth, diagnostics, invites, profile, s2s, search, spaces, sync, topics, upload
+from app.routers import admin, appeals, auth, diagnostics, invites, profile, s2s, search, servers, spaces, sync, topics, upload
 from app.ws_manager import message_bus
 
 logging.basicConfig(
@@ -97,6 +97,7 @@ app.include_router(s2s.router)
 app.include_router(upload.router)
 app.include_router(topics.router)
 app.include_router(sync.router)
+app.include_router(servers.router)
 app.include_router(diagnostics.router)
 app.include_router(invites.router)
 

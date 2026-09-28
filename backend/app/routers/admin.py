@@ -173,7 +173,9 @@ def server_profile_set(body: ServerProfileIn, admin: dict = Depends(current_user
         settings.server_name = name
     settings.server_city = city
     settings.server_country = country
-    env_path = Path(__file__).resolve().parent.parent / ".env"
+    from app.config import BASE_DIR
+
+    env_path = BASE_DIR / ".env"
     try:
         text = env_path.read_text(encoding="utf-8") if env_path.exists() else ""
     except OSError:
@@ -225,7 +227,9 @@ def federation_mode_set(body: FederationModeIn, admin: dict = Depends(current_us
     # Персистим в .env, чтобы пережил рестарт.
     from pathlib import Path
 
-    env_path = Path(__file__).resolve().parent.parent / ".env"
+    from app.config import BASE_DIR
+
+    env_path = BASE_DIR / ".env"
     try:
         text = env_path.read_text(encoding="utf-8") if env_path.exists() else ""
     except OSError:

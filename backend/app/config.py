@@ -51,6 +51,11 @@ class Settings:
         self.update_check_enabled = os.getenv("UPDATE_CHECK_ENABLED", "1") not in ("0", "false", "no")
         self.update_check_hours = int(os.getenv("UPDATE_CHECK_HOURS", "6"))
         self.auto_update_pull = os.getenv("AUTO_UPDATE_PULL", "0") not in ("0", "false", "no")
+        # Каталог серверов: сервер сам тянет servers.json с GitHub по HTTPS
+        # (шифровано транспортом) и раздаёт клиентам — клиенты на GitHub
+        # не ходят, их адреса GitHub не видит. Пусто = выкл.
+        self.servers_catalog_url = os.getenv("SERVERS_CATALOG_URL", "").strip()
+        self.servers_catalog_hours = int(os.getenv("SERVERS_CATALOG_HOURS", "12"))
         # Публичный URL, под которым раздаются загруженные файлы.
         # По умолчанию — локальный узел: http://<host>:<port>/uploads/.
         self.public_base_url = os.getenv(

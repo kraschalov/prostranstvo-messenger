@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mesenger/core/theme/app_theme.dart';
 import 'package:mesenger/features/onboarding/server_setup_screen.dart';
 import 'package:mesenger/widgets/common.dart';
+import 'package:mesenger/data/remote/api_client.dart';
 
 /// Публичный каталог серверов (servers.json из репозитория).
 /// Показывает ПСЕВДОНИМЫ, а не IP. Тап — скопировать адрес и перейти
@@ -15,7 +16,7 @@ class PublicServersScreen extends ConsumerStatefulWidget {
 
   /// URL каталога в публичном репо. Заменить на реальный при публикации.
   static const catalogUrl =
-      'https://raw.githubusercontent.com/kraschalov/prostranstvo-messenger/main/servers.json';
+      'https://raw.githubusercontent.com/OWNER/prostranstvo-messenger/main/servers.json';
 
   const PublicServersScreen({super.key});
 
@@ -41,11 +42,21 @@ class _PublicServersScreenState extends ConsumerState<PublicServersScreen> {
       _error = null;
     });
     try {
-      final res = await Dio(BaseOptions(
+      // Сначала со своего сервера (адрес телефона GitHub не видит),
+      // прямой URL — только запасной.
+      dynamic data;
+      try {
+        final mine = await ApiClient.instance.serversDirectory();
+        if (mine['ok'] == true &&
+            (mine['servers'] as List? ?? const []).isNotEmpty) {
+          data = mine;
+        }
+      } catch (_) {}
+      data ??= (await Dio(BaseOptions(
         connectTimeout: const Duration(seconds: 15),
         receiveTimeout: const Duration(seconds: 15),
-      )).get(PublicServersScreen.catalogUrl);
-      final data = res.data;
+      )).get(PublicServersScreen.catalogUrl))
+          .data;
       final list = (data is Map ? data['servers'] : data) as List? ?? const [];
       if (mounted) {
         setState(() {

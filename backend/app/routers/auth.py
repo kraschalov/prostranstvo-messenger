@@ -135,10 +135,21 @@ def recover(body: RecoverIn):
         "UPDATE users SET device_fingerprint = ? WHERE id = ?",
         (crypto.device_fingerprint_hash(fingerprint), user["id"]),
     )
+    # Код одноразовый: сразу выпускаем новый, старый умирает.
+    # Иначе один код гуляет по рукам и сажает чужие устройства на чужой акк.
+    new_code = crypto.new_invite_code()
+    db.execute(
+        "UPDATE users SET recovery_code = ? WHERE id = ?",
+        (crypto.sha256_hex("rec::" + new_code), user["id"]),
+    )
     token = create_session(user["id"])
     db.touch_last_seen(user["id"])
     updated = db.query_one("SELECT * FROM users WHERE id = ?", (user["id"],))
-    return {"token": token, "user": db.public_profile(updated, settings.server_domain)}
+    return {
+        "token": token,
+        "user": db.public_profile(updated, settings.server_domain),
+        "recovery_code": new_code,
+    }
 
 
 @router.post("/login")
