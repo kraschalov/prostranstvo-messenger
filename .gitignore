@@ -4,8 +4,9 @@
 *.db-wal
 *.sqlite
 *.sqlite-journal
-data/
-uploads/
+backend/data/
+backend/uploads/
+mobile/build/
 *.keystore
 *.jks
 key.properties
