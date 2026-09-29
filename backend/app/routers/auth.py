@@ -131,12 +131,20 @@ def recover(body: RecoverIn):
         raise HTTPException(status_code=404, detail="Неверный код восстановления")
     if user["banned"]:
         raise HTTPException(status_code=403, detail="Устройство заблокировано администратором")
-    db.execute(
-        "UPDATE users SET device_fingerprint = ? WHERE id = ?",
-        (crypto.device_fingerprint_hash(fingerprint), user["id"]),
-    )
-    # Код одноразовый: сразу выпускаем новый, старый умирает.
-    # Иначе один код гуляет по рукам и сажает чужие устройства на чужой акк.
+    try:
+        db.execute(
+            "UPDATE users SET device_fingerprint = ? WHERE id = ?",
+            (crypto.device_fingerprint_hash(fingerprint), user["id"]),
+        )
+    except Exception:
+        # Отпечаток уже занят другим пользователем (клонированные данные
+        # приложения): сначала сбрось данные приложения, потом входи.
+        # Код при этом НЕ сгорает (ротация ниже не выполнена).
+        raise HTTPException(
+            status_code=409,
+            detail="Это устройство уже привязано к другому аккаунту (перенос данных?). Очистите данные приложения и повторите.",
+        )
+    # Код одноразовый: выпускаем новый только после успеха, старый умирает.
     new_code = crypto.new_invite_code()
     db.execute(
         "UPDATE users SET recovery_code = ? WHERE id = ?",

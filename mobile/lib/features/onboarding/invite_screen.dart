@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mesenger/core/constants/app_strings.dart';
 import 'package:mesenger/core/state/app_state.dart';
 import 'package:mesenger/data/local/hive/hive_service.dart';
+import 'package:mesenger/data/local/secure/secure_store.dart';
 import 'package:mesenger/data/remote/api_client.dart';
 import 'package:mesenger/features/home/home_shell.dart';
 import 'package:mesenger/features/onboarding/profile_setup_screen.dart';
@@ -195,6 +196,20 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
               label: 'Восстановить',
               loading: _recovering,
               onPressed: _recover,
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: () async {
+                await SecureStore.instance.resetDeviceId();
+                if (context.mounted) {
+                  showAppSnack(context,
+                      'ID устройства сброшен. Вводите код восстановления.');
+                }
+              },
+              child: const Text(
+                'Клонированный телефон? Сбросить ID устройства',
+                style: TextStyle(fontSize: 12),
+              ),
             ),
           ],
         ],

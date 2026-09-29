@@ -75,6 +75,23 @@ class SecureStore {
     }
   }
 
+  /// Полный сброс ID устройства (случай клонированных аппаратов:
+  /// два физических телефона шлют один ID). Генерирует СЛУЧАЙНЫЙ
+  /// (не детерминированный — иначе клон воспроизведётся).
+  /// После сброса — вход через восстановление, сервер привяжет заново.
+  Future<String> resetDeviceId() async {
+    final rnd = Random.secure();
+    final id = _encodeB64(List<int>.generate(16, (_) => rnd.nextInt(256)));
+    deviceId = id;
+    try {
+      await _storage.write(key: 'device_id', value: id);
+    } catch (_) {}
+    try {
+      await (await _appBox()).put('device_id', id);
+    } catch (_) {}
+    return id;
+  }
+
   String _encodeB64(List<int> bytes) => base64Encode(bytes);
 
   Future<String> _sha256Hex(String input) async {

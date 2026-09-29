@@ -21,8 +21,6 @@ class _ServerSetupScreenState extends ConsumerState<ServerSetupScreen> {
   final _name = TextEditingController();
   /// Домашний сервер семьи (белый IP). В публичной сборке
   /// заменится выбором из каталога.
-  /// Публичная сборка: адрес не предзаполнен — выбери сервер
-  /// из каталога (servers.json) или вбей вручную.
   static const kDefaultServer = '';
 
   bool _loading = false;
@@ -46,7 +44,7 @@ class _ServerSetupScreenState extends ConsumerState<ServerSetupScreen> {
     // Семейный дефолт: свой сервер уже вписан — новичку остаётся
     // только нажать «Подключиться» (вход по отпечатку, без инвайта
     // для известных устройств).
-    if (_domain.text.isEmpty) {
+    if (_domain.text.isEmpty && kDefaultServer.isNotEmpty) {
       _domain.text = kDefaultServer;
     }
   }

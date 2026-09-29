@@ -510,9 +510,18 @@ static const _releaseCertSha256 =
   /// разрешение «Установка из этого источника», ждём, пока пользователь
   /// включит его в системных настройках (проверяем нативным MethodChannel),
   /// и автоматически запускаем установку.
+  /// Хеш кусками по 1МБ: на слабых аппаратах чтение 111МБ целиком
+  /// вешает UI (ANR) и рвёт память. Поток + yield между чанками.
   Future<String> _fileSha256(File f) async {
-    final h = await Sha256().hash(await f.readAsBytes());
-    return h.bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
+    final sink = Sha256().newHashSink();
+    final stream = f.openRead();
+    await for (final chunk in stream) {
+      sink.add(chunk);
+      await Future.delayed(Duration.zero);
+    }
+    sink.close();
+    final sum = await sink.hash();
+    return sum.bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
   }
 
   /// Сверка скачанного APK: хеш из манифеста + подпись релизным ключом
